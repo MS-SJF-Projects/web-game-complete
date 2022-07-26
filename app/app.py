@@ -18,7 +18,7 @@ def guess():
     if img_id is None:
         flash("no images uploaded yet")
         return redirect("/")
-    
+
     session['selection'] = img_id
 
     return render_template('guess.html')
@@ -48,7 +48,7 @@ def upload_image():
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == '':
-        flash('No selected file')
+        flash('No selected files')
         return redirect(request.url)
     app.image_store.store_image((file.content_type, file.stream.read()), request.form['secret'])
     flash("file uploaded with a secret " + request.form['secret'])
