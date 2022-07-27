@@ -1,5 +1,4 @@
 from flask import Flask, Response, flash, render_template, request, redirect, session
-import os
 from .inmemory_image_store import InMemoryImageStore
 
 app_version = '0.0.1'
