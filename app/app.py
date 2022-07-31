@@ -24,12 +24,26 @@ def guess():
 
 @app.route('/guess_image_display')
 def guess_image():
-    (content_type, img_bytes), session['secret'] = app.image_store.get_image_by_id(session['selection'])
-    return Response(img_bytes, mimetype=content_type)
+    try:
+        image_data = app.image_store.get_image_by_id(session['selection'])
+        if image_data is None:
+            return Response(status=401, response="no session set")
+        content_type, img_bytes = image_data
+        if (img_bytes is None or content_type is None):
+            raise Exception("Error fetching img_bytes or content_type")
+        return Response(img_bytes, mimetype=content_type)
+
+    except Exception as exp: # pylint: disable=broad-except
+        return Response(status=500, response=exp.__str__())
 
 @app.route('/result_guess', methods = ['POST'])
 def result_guess():
     result = request.form
+    secret_description = app.image_store.get_image_description(session['selection'])
+    if (result['guess_secret'] == secret_description):
+        flash("You guessed right!")
+    else:
+        flash("You didn't guess! Try again!")
     return render_template('result_guess.html', result  = result)
 
 def secure_filename(path):

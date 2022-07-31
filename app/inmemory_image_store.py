@@ -20,7 +20,7 @@ class InMemoryImageStore:
         """ Get an image by id."""
         if (key < 0 or key > len(self.images) - 1):
             return None
-        return self.images[key]
+        return self.images[key][0]
     
     def get_image_description(self, key):
         """ Get an image description."""

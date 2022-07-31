@@ -8,7 +8,7 @@ def test_get_random_image_when_one_image():
     store = InMemoryImageStore()
     image = ((r"text/plain", b"base64image"), "a cat 1")
     store.store_image(image[0], image[1])
-    assert store.get_image_by_id(0)[1] == image[1]
+    assert store.get_image_by_id(0) == image[0]
 
 def test_get_image_description():
     store = InMemoryImageStore()
