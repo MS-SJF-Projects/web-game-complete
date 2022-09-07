@@ -1,6 +1,6 @@
 import os
 import uuid
-from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import BlobServiceClient, ContentSettings
 import logging
 
 logging.getLogger('azure').setLevel(logging.DEBUG)
@@ -19,16 +19,21 @@ class BlobStorage:
         try:
             self.container_client.create_container(timeout=1000)
         except Exception as exp: # pylint: disable=broad-except
-            print("Exception trying to create container {}".format(exp))
+            print(f"Exception trying to create blob {exp}")
 
-    def upload_image(self, image_bytes) -> str:
+    def upload_image(self, image_bytes, content_type) -> str:
         """Store an image in a blob and returns the name of the blob"""
         try:
-            blob_name = str(uuid.uuid4()) + ".jpg"
+            blob_name = str(uuid.uuid4())
             blob_client = self.container_client.get_blob_client(blob_name)
-            blob_client.upload_blob(image_bytes)
+            blob_client.upload_blob(
+                image_bytes,
+                blob_type="BlockBlob",
+                content_settings=ContentSettings(content_type=content_type),
+            )
+
         except Exception as exp:
-            print("Exception trying to create blob {}".format(exp))
+            print(f"Exception trying to create blob {exp}")
             raise
         return blob_name    
 
@@ -37,5 +42,5 @@ class BlobStorage:
         try:
             return self.container_client.download_blob(blob_name).readall()
         except Exception as exp:
-            print("Exception trying to download blob {}".format(exp))
+            print(f"Exception trying to create blob {exp}")
             raise

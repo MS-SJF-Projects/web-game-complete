@@ -79,7 +79,7 @@ def upload_image():
         return redirect('/images')
 
     database.add(StorageItem(
-        image_storage.upload_image(image_file.stream.read()),
+        image_storage.upload_image(image_file.stream.read(),  image_file.content_type),
         image_content_type=image_file.content_type,
         secret_word=secret_word,
     ))
