@@ -9,14 +9,20 @@ def test_blob_storage(monkeypatch):
         ))
     monkeypatch.setattr(
         "azure.storage.blob.BlobServiceClient.get_container_client",
-        mock.MagicMock(return_value=mock.Mock(azure.storage.blob.ContainerClient)))
+        mock.MagicMock())
 
+    mock_generate_sas = mock.MagicMock(return_value="magic_sas_token")
+    monkeypatch.setattr(
+          "src.blob_storage.generate_blob_sas",
+          mock_generate_sas
+    )
+
+    
     blob_storage = BlobStorage()
     blob = blob_storage.upload_image(b"image_bytes", "image/png")
-
     blob_storage.container_client.create_container.assert_called() # pylint: disable=E1101
     blob_storage.container_client.get_blob_client.assert_called() # pylint: disable=E1101
+    mock_generate_sas.assert_called_once() # pylint: disable=E1101
     blob_storage.container_client.get_blob_client(blob).upload_blob.assert_called_with( # pylint: disable=E1101
         b"image_bytes", blob_type="BlockBlob", 
-        content_settings=azure.storage.blob.ContentSettings(content_type="image/png")
-    )
+        content_settings=azure.storage.blob.ContentSettings(content_type="image/png"))

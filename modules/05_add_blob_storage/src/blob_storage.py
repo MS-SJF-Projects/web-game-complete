@@ -37,7 +37,7 @@ class BlobStorage: # pylint: disable=too-few-public-methods
                             blob_name=file_name,
                             permission=BlobSasPermissions(read=True),
                             expiry=datetime.utcnow() + timedelta(hours=24))
-            image_url = 'https://'+self.account_name+'.blob.core.windows.net/'+self.container_name+'/'+file_name+'?'+sas_blob
+            image_url = f'https://{self.account_name}.blob.core.windows.net/{self.container_name}/{file_name}?sas_blob'
 
         except Exception as exp:
             print(f"Exception trying to create blob {exp}")

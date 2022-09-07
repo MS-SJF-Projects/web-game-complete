@@ -84,5 +84,5 @@ def upload_image():
     ))
     flash("Uploaded image at: "+ image_url)
     flash("Uploaded image with secret word:" + repr(secret_word))
-    flash("All available secret words:: " + repr(database.get_all_secrets()))
+    flash("All available secret words: " + repr(database.get_all_secrets()))
     return redirect('/images')
