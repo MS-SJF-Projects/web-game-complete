@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, redirect, session, Response
+from flask import Flask, flash, render_template, request, redirect, session
 from markupsafe import Markup
 
 from .in_memory_storage import InMemoryStorage, StorageItem
@@ -41,8 +41,7 @@ def game():
 @app.route('/current_image', methods=['GET'])
 def current_image():
     secret_item = database.get_item_by_index(session['secret_item_id'])
-    return Response(image_storage.download_image(secret_item.image_name), mimetype=secret_item.image_content_type)
-
+    return redirect(secret_item.image_name, code=302)
 
 @app.route('/make_a_guess', methods=['POST'])
 def make_a_guess():
@@ -78,11 +77,12 @@ def upload_image():
         flash('No file selected! Please try uploading again')
         return redirect('/images')
 
+    image_url = image_storage.upload_image(image_file.stream.read(),  image_file.content_type)
     database.add(StorageItem(
-        image_storage.upload_image(image_file.stream.read(),  image_file.content_type),
-        image_content_type=image_file.content_type,
+        image_url,
         secret_word=secret_word,
     ))
+    flash("Uploaded image at: "+ image_url)
     flash("Uploaded image with secret word:" + repr(secret_word))
     flash("All available secret words:: " + repr(database.get_all_secrets()))
     return redirect('/images')

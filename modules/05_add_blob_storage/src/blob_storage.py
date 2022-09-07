@@ -1,21 +1,21 @@
 import os
 import uuid
-from azure.storage.blob import BlobServiceClient, ContentSettings
-import logging
+from datetime import datetime, timedelta
+from azure.storage.blob import BlobServiceClient, ContentSettings, generate_blob_sas, BlobSasPermissions
 
-logging.getLogger('azure').setLevel(logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-class BlobStorage:
+class BlobStorage: # pylint: disable=too-few-public-methods
     """
         Blob store to store secret words.
     """
 
     def __init__(self):
-        connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING', '')
+        self.account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME', '')
+        self.account_key = os.getenv('AZURE_STORAGE_ACCOUNT_KEY', '')
+        connection_string = f"DefaultEndpointsProtocol=https;AccountName={self.account_name};AccountKey={self.account_key};EndpointSuffix=core.windows.net"
+
         self.client = BlobServiceClient.from_connection_string(connection_string)
-        container_name = 'images-to-guess'
-        self.container_client = self.client.get_container_client(container_name)
+        self.container_name = 'images-to-guess'
+        self.container_client = self.client.get_container_client(self.container_name)
         try:
             self.container_client.create_container(timeout=1000)
         except Exception as exp: # pylint: disable=broad-except
@@ -24,23 +24,23 @@ class BlobStorage:
     def upload_image(self, image_bytes, content_type) -> str:
         """Store an image in a blob and returns the name of the blob"""
         try:
-            blob_name = str(uuid.uuid4())
-            blob_client = self.container_client.get_blob_client(blob_name)
+            file_name = str(uuid.uuid4())
+            blob_client = self.container_client.get_blob_client(file_name)
             blob_client.upload_blob(
                 image_bytes,
                 blob_type="BlockBlob",
                 content_settings=ContentSettings(content_type=content_type),
             )
+            sas_blob = generate_blob_sas(account_name=self.account_name,
+                            account_key=self.account_key,
+                            container_name=self.container_name,
+                            blob_name=file_name,
+                            permission=BlobSasPermissions(read=True),
+                            expiry=datetime.utcnow() + timedelta(hours=24))
+            image_url = 'https://'+self.account_name+'.blob.core.windows.net/'+self.container_name+'/'+file_name+'?'+sas_blob
 
         except Exception as exp:
             print(f"Exception trying to create blob {exp}")
             raise
-        return blob_name    
+        return image_url
 
-    def download_image(self, blob_name) -> bytes:
-        """Download an image from a blob returning the content"""
-        try:
-            return self.container_client.download_blob(blob_name).readall()
-        except Exception as exp:
-            print(f"Exception trying to create blob {exp}")
-            raise
