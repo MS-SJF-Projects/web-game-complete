@@ -13,7 +13,6 @@ def test_blob_storage(monkeypatch):
     
     blob_storage = BlobStorage()
     blob = blob_storage.upload_image(b"image_bytes", "image/png")
-    blob_storage.container_client.create_container.assert_called() # pylint: disable=E1101
     blob_storage.container_client.get_blob_client.assert_called() # pylint: disable=E1101
     blob_storage.container_client.get_blob_client(blob).upload_blob.assert_called_with( # pylint: disable=E1101
         b"image_bytes", blob_type="BlockBlob", 
