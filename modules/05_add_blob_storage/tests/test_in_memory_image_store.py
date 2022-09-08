@@ -1,12 +1,18 @@
 from src.in_memory_storage import InMemoryStorage, StorageItem  # pylint: disable = import-error
 
 
-def test_get_random_image_when_empty_storage():
+def test_is_empty():
     storage = InMemoryStorage()
     assert storage.is_empty()
 
+    storage.add(StorageItem(
+        image_url="image_url",
+        secret_word="a cat 1",
+    ))
+    assert not storage.is_empty()
 
-def test_get_random_image_when_one_item():
+
+def test_get_random_index_when_one_item():
     storage = InMemoryStorage()
     storage.add(StorageItem(
         image_url="image1",
