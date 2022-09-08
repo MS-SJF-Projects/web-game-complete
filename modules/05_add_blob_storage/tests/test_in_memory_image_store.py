@@ -9,7 +9,7 @@ def test_get_random_image_when_empty_storage():
 def test_get_random_image_when_one_item():
     storage = InMemoryStorage()
     storage.add(StorageItem(
-        image_name="image1",
+        image_url="image1",
         secret_word="a cat 1",
     ))
     # when there's only one item, the only index we can get from the method is 0
@@ -19,7 +19,7 @@ def test_get_random_image_when_one_item():
 def test_get_random_image_when_one_image():
     storage = InMemoryStorage()
     storage_item = StorageItem(
-        image_name="image1",
+        image_url="image1",
         secret_word="a cat 1",
     )
     storage.add(storage_item)
@@ -34,7 +34,7 @@ def test_has_index():
     assert not storage.has_index(2)
 
     storage.add(StorageItem(
-        image_name="image1",
+        image_url="image1",
         secret_word="a cat 1",
     ))
 
@@ -43,7 +43,7 @@ def test_has_index():
     assert not storage.has_index(2)
 
     storage.add(StorageItem(
-        image_name="image2",
+        image_url="image2",
         secret_word="a cat 2",
     ))
 

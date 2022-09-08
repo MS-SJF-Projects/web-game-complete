@@ -41,7 +41,7 @@ def game():
 @app.route('/current_image', methods=['GET'])
 def current_image():
     secret_item = database.get_item_by_index(session['secret_item_id'])
-    return redirect(secret_item.image_name, code=302)
+    return redirect(secret_item.image_url, code=302)
 
 @app.route('/make_a_guess', methods=['POST'])
 def make_a_guess():

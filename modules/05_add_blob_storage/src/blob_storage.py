@@ -1,7 +1,6 @@
 import os
 import uuid
-from datetime import datetime, timedelta
-from azure.storage.blob import BlobServiceClient, ContentSettings, generate_blob_sas, BlobSasPermissions
+from azure.storage.blob import BlobServiceClient, ContentSettings
 
 class BlobStorage: # pylint: disable=too-few-public-methods
     """
@@ -31,13 +30,7 @@ class BlobStorage: # pylint: disable=too-few-public-methods
                 blob_type="BlockBlob",
                 content_settings=ContentSettings(content_type=content_type),
             )
-            sas_blob = generate_blob_sas(account_name=self.account_name,
-                            account_key=self.account_key,
-                            container_name=self.container_name,
-                            blob_name=file_name,
-                            permission=BlobSasPermissions(read=True),
-                            expiry=datetime.utcnow() + timedelta(hours=24))
-            image_url = f'https://{self.account_name}.blob.core.windows.net/{self.container_name}/{file_name}?sas_blob'
+            image_url = f'https://{self.account_name}.blob.core.windows.net/{self.container_name}/{file_name}'
 
         except Exception as exp:
             print(f"Exception trying to create blob {exp}")

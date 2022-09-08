@@ -4,9 +4,8 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class StorageItem:
-    image_name: str
+    image_url: str
     secret_word: str
-
 
 class InMemoryStorage:
     """
