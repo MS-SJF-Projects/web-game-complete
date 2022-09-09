@@ -1,4 +1,4 @@
-# web-game-complete
+# Web game tutorial
 
 This is a hands-on workshop where you will develop, from scratch, a browser game "Guess a picture". In this game you can upload pictures with a secret phrase, and other players can guess the secret phrase based on the pictures uploaded.
 
