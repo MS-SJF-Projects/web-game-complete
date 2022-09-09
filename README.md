@@ -6,13 +6,16 @@ You will learn how to implement a web app like a professional developer: write c
 
 To get started, view the prerequisites below, then see the intro module [here](modules/00_intro/README.md).
 
-Full list of all Sections / modules:
+Full list of all sections / modules:
 
 - [⚒️ Intro](modules/00_intro/README.md)
 - [🚦 Hello world](modules/01_hello_world_api/README.md)
 - [📦 Templating](modules/02_templating/README.md)
 - [❇️ In memory storage](modules/03_in_memory_storage/README.md)
 - [🚀 Image upload](modules/04_add_images/README.md)
+
+Advanced sections:
+
 - [🌐 Pull request](modules/10_pull_request_pipeline/README.md)
 - [💻 Deploying to Azure](modules/11_deploying_to_azure/README.md)
 - [📁 Blob storage](modules/12_add_blob_storage/README.md)
