@@ -1,7 +1,7 @@
 from flask import Flask, flash, render_template, request, redirect, session
 from markupsafe import Markup
 
-from .in_memory_storage import InMemoryStorage
+from src.in_memory_storage import InMemoryStorage
 
 APP_VERSION = '0.0.1'
 
@@ -46,7 +46,8 @@ def make_a_guess():
     secret_word = database.get_word_by_index(session['secret_word_id'])
 
     if request.form['guessed_word'] == secret_word:
-        flash(Markup("You guessed right! Good job! The secret word was <b>%s</b>" % secret_word))
+        flash(Markup(
+            "You guessed right! Good job! The secret word was <b>%s</b>" % secret_word))
         del session['secret_word_id']
         return redirect('/')
 
