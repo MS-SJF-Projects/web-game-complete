@@ -1,8 +1,8 @@
-from unittest import skip
 from collections import defaultdict
 
 from src.database.cosmos_storage import CosmosStorage
 from src.database.storage_item import StorageItem
+from azure.cosmos import exceptions
 
 
 # See the concept of test doubles at
@@ -12,7 +12,10 @@ class FakeCosmosContainer:
         self._partitions = defaultdict(dict)
 
     def read_item(self, item_id, partition_key):
-        return self._partitions[partition_key][item_id]
+        try:
+            return self._partitions[partition_key][item_id]
+        except Exception as exc:
+            raise exceptions.CosmosHttpResponseError from exc
 
     def read_all_items(self, max_item_count=None):
         all_items = [
@@ -76,7 +79,6 @@ def test_get_item_by_index():
     assert storage.get_item_by_index(inserted_id_2) == storage_item_2
 
 
-@skip("failing")
 def test_has_index():
     storage = CosmosStorage(FakeCosmosContainer())
 
