@@ -9,7 +9,7 @@ Implement an interactive web app where you can:
 
 ## Tutorial
 
-> In this tutorial we will assume that you've completed the previous tutorial
+In this tutorial we will assume that you've completed the previous tutorial
 and already have a python project with `app.py`, `src/api.py` and `src/templates`.
 
 ### Part 1. Uploading words
@@ -52,17 +52,16 @@ Add a new endpoint on the route `/words` to `api.py`, like we did in the previou
 Also add a link to the `/words` page to `home.html`:
 
 ```html
+<p></p>  <!-- This creates a empty line -->
 <a href="./words">Upload Word</a>
 ```
 
 Now start the app, and verify that you can see this form when you open the page `/words`.
 
-When you type in a word in the form and click "submit", your browser will try to
-send it to the endpoint `/upload_word`. This is the endpoint we specified in the
-`action` attribute of the form.
+When you type in a word in the form and click *"Submit"*, your browser will try to send it to the endpoint `/upload_word`.
+This is the endpoint we specified in the `action` attribute of the form.
 
-Because this endpoint doesn't exist yet, in the browser you'll see a "Not Found" page,
-and in the logs of the running application you'll see the following entry:
+Because this endpoint doesn't exist yet, in the browser you'll see a "Not Found" page, and in the logs of the running application you'll see the following entry:
 
 ```txt
 127.0.0.1 - - [01/Jan/2022 11:12:34] "POST /upload_word HTTP/1.1" 404 -
@@ -86,153 +85,24 @@ def upload_word():
 Run the application, try uploading a word, and verify that the upload works now.
 Verify that in the application log you see the uploaded word.
 
+The log should look like:
+
+```txt
+127.0.0.1 - - [01/Jan/2022 11:12:34] "POST /upload_word HTTP/1.1" 302 -
+```
+
+> 📝 **Note:** Notice how the logs status code is now `302`
+
 #### 4. Give user feedback
 
 It's good to let the user know that the word was uploaded too.
 
-Flask has a concept of flashing that we can use. In the logic of our endpoint we
-would "flash" one or more messages, and these messages will become available
-to us when rendering a template that we show to the user.
+Flask has a concept of flashing that we can use. In the logic of our endpoint we would "flash" one or more messages, and these messages will become available to us when rendering a template that we show to the user.
 
-> More detailed explanation of flashing you can find in the [documentation](https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/).
+> 🌐 **Extra:** More detailed explanation of flashing you can find in the [documentation](https://flask.palletsprojects.com/en/2.2.x/patterns/flashing/).
 
-First, instead of `print` in the endpoint logic, use `flask.flash`:
-
-```python
-from flask import flash
-
-...
-    flash("Uploaded word " + repr(secret_word))
-...
-```
-
-Second, render the flashed messages on the page.
-Better add this logic right to the base template `base.html`,
-this way all pages inherited from it will learn to display flashed messages.
-
-```html
-    <div class="container">
-  
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class="flashes">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    </div>
-```
-
-Run the app, try uploading words again. Verify that now you get a message on the top of the page
-that your word was uploaded successfully.
-
-### Part 2. Word storage
-
-#### Intro
-
-Now we know how to send words to the server and back, let's store the uploaded words.
-This way we'll actually be able to play the game of guessing one word of the many uploaded.
-
-Usually one uses an external database to store data there and read if from there, but we'll start simple.
-We will store everything right on the server, in the memory of our program.
-
-#### 1. Create a class for the word storage
-
-Let's create a new Python `class` in `src/in_memory.storage.py`:
-
-```python
-class InMemoryStorage:
-    def __init__(self):
-        self.storage = []
-
-    def add_word(self, secret_word: str) -> None:
-        """ Store a secret word."""
-        self.storage.append(secret_word)
-
-    def get_all_words(self):
-        """ Get all words saved so far. """
-        return self.storage
-```
-
-We will be able to use it like this:
-
-```python
-from src.in_memory_storage import InMemoryStorage
-
-storage1 = InMemoryStorage()  # create a new object of this class
-storage1.add_word("dog")
-print(storage1.get_all_words())  # prints ['dog']
-storage1.add_word("cat")
-print(storage1.get_all_words())  # prints ['dog', 'cat']
-
-storage2 = InMemoryStorage()  # create another object of this class
-print(storage2.get_all_words())  # prints empty list []
-storage2.add_word("boo!")
-print(storage2.get_all_words())  # prints ['boo!']
-```
-
-#### 2. Save words to the in-memory storage
-
-On the top of the file `api.py`, create our "database" - an object of the class InMemoryStorage.
-
-```python
-from src.in_memory_storage import InMemoryStorage
-
-database = InMemoryStorage()
-```
-
-This variable will be visible to all endpoints in `api.py`, and they all will be able to read from it
-or write to it.
-
-Change the endpoint `/upload_word` so that it uses the database:
-
-```python
-from src.in_memory_storage import InMemoryStorage
-
-database = InMemoryStorage()
-
-@app.route('/upload_word', methods=['POST'])
-def upload_word():
-    secret_word = request.form['secretWord']
-    database.add_word(secret_word)  # save word to the db
-    flash("Uploaded word " + repr(secret_word))
-    flash("All available words: " + repr(database.get_all_words()))  # display all words saved so far
-    return redirect('/')
-```
-
-Run the app, try uploading words again. Verify that now you get more informative messages,
-and that the server now remembers all the words you've uploaded so far.
-
-> Caveat: Because we store words in memory, this storage is alive as long as the server itself
-> is alive. If you shut down the server, its memory is released, and all saved words will be forgotten.
-
-> Caveat: storing words in memory also doesn't play well with running Flask in DEBUG mode.
-> Flask in DEBUG mode restarts the server every time you've changed something in the code,
-> which again means losing all the saved words.
-
-### Part 3. The Game
-
-#### Intro
-
-The game of guessing words will go as follows:
-
-- the user visits a `/game` page;
-- our server randomly chooses a secret word the user has to guess;
-- the user sends their guesses through a form until they get it right;
-- if they get it right, they are congratulated and redirected back to the main page.
-
-Note that until the user wins the game, we need to remember the secret word that they have to guess.
-
-We did something similar when we were storing all uploaded words in the database. But this case is different:
-if multiple players visit our server, we want them to play with the same, common set of words, but their
-games shouldn't interfere. Each player should play their own game, with their own random secret word.
-
-Here we'll make use a new concept - a "session". A session makes it possible to remember information
-from one request to another, and every visitor of our website has their own session. We can
-save the word to guess in the session, and it will stay the same throughout the game, until we decide
-to change it ourselves.
+To enable flashing, we'll need to enable "sessions" in `Flask`. A session makes it possible to remember information
+from one request to another, and every visitor of our website has their own session.
 
 > More about sessions - in [flask docs](https://flask.palletsprojects.com/en/2.2.x/api/#sessions)
 
@@ -255,7 +125,160 @@ app = Flask(__name__)
 app.secret_key = "f3cfe9ed8fae309f02079dbf"  # random string
 ```
 
-#### 2. Create the game page
+#### 2. Use flashing
+
+First, instead of `print` in the endpoint logic, use `flask.flash`:
+
+```python
+from flask import flash
+
+...
+    flash("Uploaded word " + repr(secret_word))
+...
+```
+
+Second, render the flashed messages on the page. Better add this logic right to the base template `base.html`, this way all pages inherited from it will learn to display flashed messages.
+
+```html
+    <div class="container">
+    ...
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    ...
+    </div>
+```
+
+Run the app, try uploading words again. Verify that now you get a message on the top of the page
+that your word was uploaded successfully.
+
+### Part 2. Word storage
+
+#### Intro
+
+Now we know how to send words to the server and back, let's store the uploaded words.
+This way we'll actually be able to play the game of guessing one word of the many uploaded.
+
+Usually one uses an external database to store data there and read if from there, but we'll start simple.
+We will store everything right on the server, in the memory of our program.
+
+#### 1. Create a class for the word storage
+
+Let's create a new Python `class` in `src/in_memory_storage.py`:
+
+```python
+class InMemoryStorage:
+    def __init__(self):
+        self.storage = []
+
+    def add_word(self, secret_word: str) -> None:
+        """ Store a secret word."""
+        self.storage.append(secret_word)
+
+    def get_all_words(self):
+        """ Get all words saved so far. """
+        return self.storage
+```
+
+> 🔥 **Experiment:** To test out our database file, you can add the below code to the `api.py` or `app.py`. You can remove the code when you're done.
+
+```python
+from src.in_memory_storage import InMemoryStorage
+
+storage1 = InMemoryStorage()  # create a new object of this class
+storage1.add_word("dog")
+print(storage1.get_all_words())  # prints ['dog']
+storage1.add_word("cat")
+print(storage1.get_all_words())  # prints ['dog', 'cat']
+
+storage2 = InMemoryStorage()  # create another object of this class
+print(storage2.get_all_words())  # prints empty list []
+storage2.add_word("boo!")
+print(storage2.get_all_words())  # prints ['boo!']
+```
+
+When you run your API, you should be able to see the database work in the logs like this:
+
+```txt
+['dog']
+['dog', 'cat']
+[]
+['boo!']
+```
+
+> ⚠️ **Warning:** If you run into python import issues create `.vscode/settings.json` with be below content:
+
+```json
+{
+    "python.linting.pylintArgs": [
+        "--init-hook",
+        "import sys; sys.path.insert(0, './')"
+    ]
+}
+```
+
+#### 2. Save words to the in-memory storage
+
+On the top of the file `api.py`, create our "database" - an object of the class `InMemoryStorage`.
+
+```python
+from src.in_memory_storage import InMemoryStorage
+
+database = InMemoryStorage()
+```
+
+Just like the `APP_VERSION`, this variable will be visible to all endpoints in `api.py`, and they all will be able to read from it
+or write to it.
+
+Change the endpoint `/upload_word` so that it uses the database:
+
+```python
+from src.in_memory_storage import InMemoryStorage
+
+database = InMemoryStorage()
+
+@app.route('/upload_word', methods=['POST'])
+def upload_word():
+    secret_word = request.form['secretWord']
+    database.add_word(secret_word)  # save word to the db
+    flash("Uploaded word " + repr(secret_word))
+    flash("All available words: " + repr(database.get_all_words()))  # display all words saved so far
+    return redirect('/')
+```
+
+Run the app, try uploading words again. Verify that now you get more informative messages, and that the server now remembers all the words you've uploaded so far.
+
+> 📝 **Note:** Because we store words in memory, this storage is alive as long as the server itself is alive.
+> If you shut down the server, its memory is released, and all saved words will be forgotten.
+
+> 📝 **Note:** storing words in memory also doesn't play well with running Flask in DEBUG mode.
+> Flask in DEBUG mode restarts the server every time you've changed something in the code, which again means losing all the saved words.
+
+### Part 3. The Game
+
+#### Intro
+
+The game of guessing words will go as follows:
+
+- the user visits a `/game` page;
+- our server randomly chooses a secret word the user has to guess;
+- the user sends their guesses through a form until they get it right;
+- if they get it right, they are congratulated and redirected back to the main page.
+
+> 📝 **Note:** that until the user wins the game, we need to remember the secret word that they have to guess.
+
+We did something similar when we were storing all uploaded words in the database.
+But this case is different: if multiple players visit our server, we want them to play with the same, common set of words, but their games shouldn't interfere. Each player should play their own game, with their own random secret word.
+
+We can save the word to guess in the session, and it will stay the same throughout the game, until we decide to change it ourselves.
+
+#### 1. Create the game page
 
 Let's create an HTML page `src/templates/game.html` (inherited from `base.html`) with a form:
 
@@ -279,6 +302,7 @@ def game():
 Add a link to this new page from the main page `home.html`:
 
 ```html
+<p></p>
 <a href="./game">Play The Game</a>
 ```
 
@@ -294,7 +318,7 @@ def make_a_guess():
 
 Start the app, verify the pages render well. (The game itself is not functional at this point)
 
-#### 3. Choose secret word for the game
+#### 2. Choose secret word for the game
 
 When the game starts, we should choose a secret word, save it to user's session,
 and only delete it from there when they have guessed the word correctly.
@@ -362,11 +386,21 @@ Open the cookies in your browser.
 
 Chrome:
 
-`Menu > More tools > Developer Tools > Application > Storage > Cookies`
+```txt
+# Open developer tools
+F12
+OR
+Menu > More tools > Developer Tools
+
+# Open cookies
+Application > Storage > Cookies
+```
 
 Firefox:
 
-`Menu > More tools > Web Developer Tools > Storage > Cookies`
+```txt
+Menu > More tools > Web Developer Tools > Storage > Cookies
+```
 
 Safari:
 
