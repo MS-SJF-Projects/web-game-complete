@@ -18,116 +18,116 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
 
 2. Add a `.gitignore` file to the project root with below content:
 
-  ```txt
-  # Byte-compiled / optimized / DLL files
-  __pycache__/
-  *.py[cod]
-  *$py.class
+    ```txt
+    # Byte-compiled / optimized / DLL files
+    __pycache__/
+    *.py[cod]
+    *$py.class
 
-  # C extensions
-  *.so
+    # C extensions
+    *.so
 
-  # Distribution / packaging
-  .Python
-  env/
-  build/
-  develop-eggs/
-  dist/
-  downloads/
-  eggs/
-  .eggs/
-  lib/
-  lib64/
-  parts/
-  sdist/
-  var/
-  wheels/
-  *.egg-info/
-  .installed.cfg
-  *.egg
+    # Distribution / packaging
+    .Python
+    env/
+    build/
+    develop-eggs/
+    dist/
+    downloads/
+    eggs/
+    .eggs/
+    lib/
+    lib64/
+    parts/
+    sdist/
+    var/
+    wheels/
+    *.egg-info/
+    .installed.cfg
+    *.egg
 
-  # PyInstaller
-  #  Usually these files are written by a python script from a template
-  #  before PyInstaller builds the exe, so as to inject date/other infos into it.
-  *.manifest
-  *.spec
+    # PyInstaller
+    #  Usually these files are written by a python script from a template
+    #  before PyInstaller builds the exe, so as to inject date/other infos into it.
+    *.manifest
+    *.spec
 
-  # Installer logs
-  pip-log.txt
-  pip-delete-this-directory.txt
+    # Installer logs
+    pip-log.txt
+    pip-delete-this-directory.txt
 
-  # Unit test / coverage reports
-  tests/test-output.xml
-  junit/
-  htmlcov/
-  .tox/
-  .coverage
-  .coverage.*
-  .cache
-  nosetests.xml
-  coverage.xml
-  *.cover
-  .hypothesis/
-  .pytest_cache/
+    # Unit test / coverage reports
+    tests/test-output.xml
+    junit/
+    htmlcov/
+    .tox/
+    .coverage
+    .coverage.*
+    .cache
+    nosetests.xml
+    coverage.xml
+    *.cover
+    .hypothesis/
+    .pytest_cache/
 
-  # Translations
-  *.mo
-  *.pot
+    # Translations
+    *.mo
+    *.pot
 
-  # Django stuff:
-  *.log
-  local_settings.py
+    # Django stuff:
+    *.log
+    local_settings.py
 
-  # Flask stuff:
-  instance/
-  .webassets-cache
+    # Flask stuff:
+    instance/
+    .webassets-cache
 
-  # Scrapy stuff:
-  .scrapy
+    # Scrapy stuff:
+    .scrapy
 
-  # Sphinx documentation
-  docs/_build/
+    # Sphinx documentation
+    docs/_build/
 
-  # PyBuilder
-  target/
+    # PyBuilder
+    target/
 
-  # Jupyter Notebook
-  .ipynb_checkpoints
+    # Jupyter Notebook
+    .ipynb_checkpoints
 
-  # pyenv
-  .python-version
+    # pyenv
+    .python-version
 
-  # celery beat schedule file
-  celerybeat-schedule
+    # celery beat schedule file
+    celerybeat-schedule
 
-  # SageMath parsed files
-  *.sage.py
+    # SageMath parsed files
+    *.sage.py
 
-  # dotenv
-  .env
+    # dotenv
+    .env
 
-  # virtualenv
-  .venv
-  venv/
-  ENV/
+    # virtualenv
+    .venv
+    venv/
+    ENV/
 
-  # Spyder project settings
-  .spyderproject
-  .spyproject
+    # Spyder project settings
+    .spyderproject
+    .spyproject
 
-  # Rope project settings
-  .ropeproject
+    # Rope project settings
+    .ropeproject
 
-  # mkdocs documentation
-  /site
+    # mkdocs documentation
+    /site
 
-  # mypy
-  .mypy_cache/
+    # mypy
+    .mypy_cache/
 
-  # IDE settings
-  .vscode/
-  .idea/
-  ```
+    # IDE settings
+    .vscode/
+    .idea/
+    ```
 
 3. Make sure all your changes are committed and pushed to the `main` branch
 
