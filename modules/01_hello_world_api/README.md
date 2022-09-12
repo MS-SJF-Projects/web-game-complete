@@ -55,7 +55,7 @@ In the first stage we're going to create a python web API with [Flask](https://f
     from src.api import app 
 
     if __name__ == '__main__':
-    app.run(debug=True)
+        app.run(debug=True)
     ```
 
 4. Run the API from the project root folder
