@@ -192,6 +192,7 @@ Now that the image is stored, we can display it during the game as a "hint"
 for the word to guess.
 
 There are many ways to do it. We'll do it this way:
+
 - make all images available by the item id on a new endpoint, i.e. make all images publicly available by links.
 - inject the right image link to the game page when rendering it.
 
@@ -202,6 +203,8 @@ Flask uses a special variable `request.args` to store URL parameters.
 Add the following endpoint ot your code:
 
 ```python
+from flask import Response
+
 @app.route('/image', methods=['GET'])
 def get_image():
     item_id = int(request.args['item_id'])
