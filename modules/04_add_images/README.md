@@ -25,9 +25,9 @@ You've seen this many times: a button "Upload file" where you can
 attach a file from your local computer before form submission.
 This is exactly what we'll do to upload the images.
 
-#### 1. Add a second input to the form 
+#### 1. Add a second input to the form
 
-In the previous stage we've created the file `words.html` with a 
+In the previous stage we've created the file `words.html` with a
 form for word upload. Add a new input field with type "file" to the form, e.g.:
 
 ```html
@@ -58,7 +58,7 @@ Add the following code to the endpoint that accepts the form data:
     flash('Uploaded %s bytes of type %s' % (len(image_bytes), image_content_type))
 ```
 
-Run the app, upload an image, and verify that you see a notification about a successful upload. 
+Run the app, upload an image, and verify that you see a notification about a successful upload.
 It should say something like `Uploaded 829646 bytes of type image/jpeg`.
 
 ### Part 2. Store images
@@ -96,8 +96,7 @@ class StorageItem:
 
 #### 2. Migrate InMemoryStorage to using StorageItem
 
-Let's change `InMemoryStorage` to operate `StorageItem`-s instead of 
-secret words directly. 
+Let's change `InMemoryStorage` to operate `StorageItem`-s instead of secret words directly. 
 
 You can use this implementation as an example:
 

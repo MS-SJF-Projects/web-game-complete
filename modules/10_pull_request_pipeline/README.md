@@ -16,7 +16,120 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
 
     The above command should output `main`
 
-2. Make sure all your changes are committed and pushed to the `main` branch
+2. Add a `.gitignore` file to the project root with below content:
+
+  ```txt
+  # Byte-compiled / optimized / DLL files
+  __pycache__/
+  *.py[cod]
+  *$py.class
+
+  # C extensions
+  *.so
+
+  # Distribution / packaging
+  .Python
+  env/
+  build/
+  develop-eggs/
+  dist/
+  downloads/
+  eggs/
+  .eggs/
+  lib/
+  lib64/
+  parts/
+  sdist/
+  var/
+  wheels/
+  *.egg-info/
+  .installed.cfg
+  *.egg
+
+  # PyInstaller
+  #  Usually these files are written by a python script from a template
+  #  before PyInstaller builds the exe, so as to inject date/other infos into it.
+  *.manifest
+  *.spec
+
+  # Installer logs
+  pip-log.txt
+  pip-delete-this-directory.txt
+
+  # Unit test / coverage reports
+  tests/test-output.xml
+  junit/
+  htmlcov/
+  .tox/
+  .coverage
+  .coverage.*
+  .cache
+  nosetests.xml
+  coverage.xml
+  *.cover
+  .hypothesis/
+  .pytest_cache/
+
+  # Translations
+  *.mo
+  *.pot
+
+  # Django stuff:
+  *.log
+  local_settings.py
+
+  # Flask stuff:
+  instance/
+  .webassets-cache
+
+  # Scrapy stuff:
+  .scrapy
+
+  # Sphinx documentation
+  docs/_build/
+
+  # PyBuilder
+  target/
+
+  # Jupyter Notebook
+  .ipynb_checkpoints
+
+  # pyenv
+  .python-version
+
+  # celery beat schedule file
+  celerybeat-schedule
+
+  # SageMath parsed files
+  *.sage.py
+
+  # dotenv
+  .env
+
+  # virtualenv
+  .venv
+  venv/
+  ENV/
+
+  # Spyder project settings
+  .spyderproject
+  .spyproject
+
+  # Rope project settings
+  .ropeproject
+
+  # mkdocs documentation
+  /site
+
+  # mypy
+  .mypy_cache/
+
+  # IDE settings
+  .vscode/
+  .idea/
+  ```
+
+3. Make sure all your changes are committed and pushed to the `main` branch
 
     ```sh
     git add --all
@@ -24,7 +137,7 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
     git push
     ```
 
-3. Create a branch off your `main` branch in git
+4. Create a branch off your `main` branch in git
 
     ```sh
     # Your branch name. This can be anything you want, but feature/<feature_name> is a common practice
@@ -33,11 +146,11 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
     git checkout $BRANCH_NAME
     ```
 
-4. Create a `.github/workflows` folder in the root of the project
+5. Create a `.github/workflows` folder in the root of the project
 
     > For Github to recognize a workflow, it must be defined in the `.github/workflows` directory in a repository. You can have multiple workflows, each of which can perform a different set of tasks.
 
-5. In the above folder create a `pull_request.yaml` file with the below content:
+6. In the above folder create a `pull_request.yaml` file with the below content:
 
     > Workflow files use YAML syntax, and must have either a .yml or .yaml file extension. If you're new to YAML and want to learn more, see ["Learn YAML in Y minutes."](https://learnxinyminutes.com/docs/yaml/)
 
@@ -70,13 +183,13 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
 
     > For more information about the workflow file syntax, see ["Understanding the workflow file"](https://docs.github.com/en/actions/using-workflows/about-workflows#understanding-the-workflow-file)
 
-6. Make sure all the tests are passing by running the `Run tests` step command locally first. If not, fix the tests
+7. Make sure all the tests are passing by running the `Run tests` step command locally first. If not, fix the tests
 
-7. Commit and push these changes to your new branch
+8. Commit and push these changes to your new branch
 
     > **TIP:** Keep your commit messages short and consistent and use imperative statements, for example "Add PR pipeline". For more tips and examples on writing commit messages, see ["How to Write a Git Commit Message"](https://cbea.ms/git-commit/example)
 
-8. [Create a pull request on Github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your new branch to the `main` of your fork.
+9.  [Create a pull request on Github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your new branch to the `main` of your fork.
 
 This should trigger the workflow that we just created.
 
