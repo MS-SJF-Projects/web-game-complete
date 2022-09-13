@@ -3,6 +3,7 @@
 ## Goal
 
 Implement an interactive web app where you can:
+
 - upload pairs (image, word), where the word describes the image, to the game database;
 - play a game of guessing the word from the image.
 
@@ -11,10 +12,9 @@ Implement an interactive web app where you can:
 > In this tutorial we will assume that you've completed the previous tutorial
 and already have a game where you guess words but without an image hint.
 
-In the previous stage, we created a game with words. The difference is now we also have images. 
+In the previous stage, we created a game with words. The difference is now we also have images.
 Images need to be uploaded, stored, and shown to the user on the game page.
-Therefore, we'll need to extend functionality of the HTML upload form, 
-the endpoint that accepts form data, the storage format, and the game page.
+Therefore, we'll need to extend functionality of the HTML upload form, the endpoint that accepts form data, the storage format, and the game page.
 
 ### Part 1. Upload images
 
@@ -96,7 +96,7 @@ class StorageItem:
 
 #### 2. Migrate InMemoryStorage to using StorageItem
 
-Let's change `InMemoryStorage` to operate `StorageItem`-s instead of secret words directly. 
+Let's change `InMemoryStorage` to operate `StorageItem`-s instead of secret words directly.
 
 You can use this implementation as an example:
 
@@ -214,17 +214,16 @@ def get_image():
 
 Now each image has its own public link!
 
-Run the app, upload an image, and verify that you can see this image
-`/image?item_id=0`. 
+Run the app, upload an image, and verify that you can see this image `/image?item_id=0`.
 Upload another one, and verify you can see it on `/image?item_id=1`.
 
 #### 2. Inject the link to the image to the game page
 
 This is surprisingly easy to do.
-The index of the item to guess is stored in the flask session, 
+The index of the item to guess is stored in the flask session,
 and jinja can access the session when rendering a template.
 
-Add the following line to `game.html`: 
+Add the following line to `game.html`:
 
 ```html
 <img src="/image?item_id={{ session['secret_item_id'] }}" style="max-height:800px;max-width:800px;height:auto;width:auto;">
@@ -278,6 +277,8 @@ def test_is_empty():
     storage = InMemoryStorage()  # create empty storage
     assert storage.is_empty()  # verify it's empty when it's just created
 ```
+
+Then create **two** empty `__init__.py` files, one in `/src` and one in ´/tests´
 
 Run this test by running `pytest` in the root folder of your project.
 You should see a report about a successful test run:
