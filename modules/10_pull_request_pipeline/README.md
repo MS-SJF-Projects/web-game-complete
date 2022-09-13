@@ -188,15 +188,15 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
 
     > **TIP:** Keep your commit messages short and consistent and use imperative statements, for example "Add PR pipeline". For more tips and examples on writing commit messages, see ["How to Write a Git Commit Message"](https://cbea.ms/git-commit/example)
 
-9.  [Create a pull request on Github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your new branch to the `main` of your fork.
+9. [Create a pull request on Github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your new branch to the `main` of your fork.
 
-This should trigger the workflow that we just created.
+    This should trigger the workflow that we just created.
 
-9.  Look for the run in the [the workflow history](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/viewing-workflow-run-history) on Github and make sure it ran without any errors
+10. Look for the run in the [the workflow history](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/viewing-workflow-run-history) on Github and make sure it ran without any errors
 
     If the run doesn't appear in the list, make sure the PR targets the main branch and that you've formatted the `pull_request.yaml` correctly.
 
-10. Add an additional step with linting to the pipeline by adding the below code to the end of `pull_request.yaml`:
+11. Add an additional step with linting to the pipeline by adding the below code to the end of `pull_request.yaml`:
 
     > **TIP:** make sure you're using the correct indentation when adding this to the file
 
@@ -205,7 +205,7 @@ This should trigger the workflow that we just created.
             run: pylint --disable=C,R0801 src/ 
     ```
 
-11. Make sure all the linting is passing by running the `Lint python` step command locally first. If it's failing, fix the issues found
-12. Commit and push your changes
-13. Check that your pipeline has successfully passed
-14. Merge your PR
+12. Make sure all the linting is passing by running the `Lint python` step command locally first. If it's failing, fix the issues found
+13. Commit and push your changes
+14. Check that your pipeline has successfully passed
+15. Merge your PR
