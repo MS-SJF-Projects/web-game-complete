@@ -507,4 +507,37 @@ Now you can think how you can further improve this game! For example:
 
 TODO: Potential additional topics to cover: testing and debugging
 
+### 6. debugging
+
+To enable debugging with break points in VSCode, add `.vscode/launch.json` with the below contents:
+
+```json
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug API",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "src/app.py",
+                "FLASK_ENV": "development"
+            },
+            "args": [
+                "run",
+                "--no-debugger"
+            ],
+            "jinja": true,
+            "justMyCode": true
+        }
+    ]
+}
+```
+
+Then read the docs here to run your program with the above file: <https://code.visualstudio.com/docs/editor/debugging>
+
 ### [Return to Main Index](../../README.md)
