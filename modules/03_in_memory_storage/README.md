@@ -524,8 +524,8 @@ To enable debugging with break points in VSCode, add `.vscode/launch.json` with 
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "src/app.py",
-                "FLASK_ENV": "development"
+                "FLASK_APP": "./app.py",
+                "FLASK_DEBUG": "1"
             },
             "args": [
                 "run",
