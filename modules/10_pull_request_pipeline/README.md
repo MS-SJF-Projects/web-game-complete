@@ -173,7 +173,7 @@ If your code is hosted on GitHub, a simple way to create a workflow is to use [G
 
           - name: Install dependencies
             run: |
-            pip install -r requirements.txt
+              pip install -r requirements.txt
 
           - name: Run tests
             run: pytest
