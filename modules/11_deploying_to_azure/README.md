@@ -16,6 +16,8 @@ At the end of this stage you and everyone else will be able to access your websi
     # Replace <your_initials> with your initials
     SITE_PREFIX=<your_initials>
     az webapp up --runtime PYTHON:3.9 --sku FREE --logs --name ${SITE_PREFIX}-sjf-site --location westeurope --resource-group ${SITE_PREFIX}-sjf-rg --plan ${SITE_PREFIX}-sjf-plan
+    az webapp config appsettings set --resource-group ${SITE_PREFIX}-sjf-rg --name ${SITE_PREFIX}-sjf-site --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
+
     ```
 
 3. After waiting for a few minutes, you should be able to access your website from the url: <https://<your_initial>-sjf-gamesite.azurewebsites.net>
